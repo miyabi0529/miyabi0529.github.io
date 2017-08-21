@@ -1,0 +1,33 @@
+<html>
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>付箋の表示（モネ：日傘の女）</title>
+      <meta http-equiv="Content-Language" content="ja" />
+      <meta http-equiv="Content-Script-Type" content="text/javascript" />
+      <script type="text/javascript">
+	      var px = 100;
+	      var py = 100;
+	      var tx = ["風が吹いている","顔が描かれていない","タッチがよい","色がやわらか","ブルーがきれい"];
+	      var n = -1;
+	      function move(){
+		      px = px + 10;
+		      n = n+1;
+		      document.getElementById("fusen").value = tx[n%5];
+		      document.getElementById("myText").style.left = px;
+		      document.getElementById("myText").style.top = py;
+		      setTimeout("move()",3000);
+	      }
+	      
+         /* onloadイベント発生した時に行う処理を記述 */
+         function init() {
+            move();
+         }
+      </script>
+   <link rel="stylesheet" type="text/css" href="/common/css/example.css"></head>
+   <body onload="init()">
+      <img src="2017081800.png"><br>
+      <div id="myText" style="POSITION: absolute; Z-INDEX: 2; VISIBILITY: visible; TOP: 100px; LEFT: 100px;">
+         <input type="text" size="40" id="fusen" />
+      </div> 
+   </body>
+</html>
