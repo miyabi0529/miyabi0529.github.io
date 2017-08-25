@@ -1,32 +1,58 @@
 <html>
    <head>
       <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <title>付箋の表示（ハムスター:覗き見）</title>
+      <title>付箋の表示</title>
       <meta http-equiv="Content-Language" content="ja" />
       <meta http-equiv="Content-Script-Type" content="text/javascript" />
       <script type="text/javascript">
-	      var px = [29,211,302,216,375];
-	      var py = [320,66,161,244,14];
-	      var tx = ["段ボール","ハムスター","かわいい","かわいい","段ボール"];
+	      var an;
+	      var px = new Array(100);
+	      var py = new Array(100);
+	      var tx = new Array(100);
 	      var n;
 	      function move(){
 		      n = Math.floor(Math.random()*1000);
-		      document.getElementById("fusen").value = tx[n%5];
-		      document.getElementById("myText").style.left = px[n%5];
-		      document.getElementById("myText").style.top = py[n%5];
-		      setTimeout("move()",3000);
+		      document.getElementById("fusen").value = tx[n%an];
+		      document.getElementById("myText").style.left = px[n%an];
+		      document.getElementById("myText").style.top = py[n%an];
+		      setTimeout("move()",2000);
 	      }
 	      
          /* onloadイベント発生した時に行う処理を記述 */
          function init() {
-            move();
+		 var obj1 = document.getElementById("selfile");
+		 obj1.addEventListener("change",function(evt){
+			 var file = evt.target.files;
+			 var reader = new FileReader();
+			 reader.readAsText(file[0]);
+			 reader.onload = function(ev){
+				 alert(reader.result);
+				 ln = reader.result.split("\n");
+				 an = ln.length-1;
+				 document.getElementById("gazo").src = ln[0];
+				 for(var i = 1; i < an+1; i++) {
+				 	w = ln[i].split(",");
+				 	px[i-1] = w[0];
+					py[i-1] = w[1];
+					tx[i-1] = w[2];
+				 }
+			 }
+		 },false);
+		move();
+
+
          }
       </script>
-   <link rel="stylesheet" type="text/css" href="/common/css/example.css"></head>
-   <body onload="init()">
-      <img src="shutterstock_442311646-e1484872330368.png"><br>
-      <div id="myText" style="POSITION: absolute; Z-INDEX: 2; VISIBILITY: visible; TOP: 0px; LEFT: 0px;">
-         <input type="text" size="20" id="fusen" />
-      </div> 
-   </body>
+	   <link rel="stylesheet" type="text/css" href="/common/css/example.css"></head>
+	<body onload="init()">
+	   <img id="gazo" src="a.jpg" height="700"><br>
+		<form name="test">
+			ログファイルを選択してください：<a href="https://github.com/mackhasegawa/mackhasegawa.github.io/blob/master/annotation_log.txt">[ログの例]</a><br>
+			<input type="file" id="selfile"><br>
+		</form>
+		<a href="https://mackhasegawa.github.io/put_annotation.html">[付箋の生成]</a><br>
+	   <div id="myText" style="POSITION: absolute; Z-INDEX: 2; VISIBILITY: visible; TOP: -1000px; LEFT: 0px;">
+		   <input type="text" size="20" id="fusen" />
+	   </div>
+	</body>
 </html>
